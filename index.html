@@ -1,0 +1,83 @@
+<!--
+Name: Amauri Carlos
+Date: July 04, 2019
+From: São Paulo - Brazil 
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Calculo de Frete</title>
+    </head>
+    <body>
+        <label>Digite o CEP:</label><input type="text" id="cep" placeholder="Apenas Numeros"><br><br>
+        <label>Digite o Logradouro:</label><input type="text" id="log"><br><br>
+        <label>Digite o Bairro:</label><input type="text" id="bai"><br><br>
+        <label>Digite o Cidade:</label><input type="text" id="cid"><br><br>
+        <p id="stats"></p>
+        <input type="button" id="env" value="Consultar">
+
+        <script type="text/javascript">
+        var sta = document.getElementById('stats');
+        var cep = document.getElementById('cep').value;
+        var cep2 = document.getElementById('cep');
+        var log = document.getElementById('log');
+        var bai = document.getElementById('bai');
+        var cid = document.getElementById('cid');
+        var btn = document.getElementById('env');
+
+        btn.addEventListener('click',function(){
+            var cep = document.getElementById('cep').value;
+            let xhr = new XMLHttpRequest();
+			xhr.open('GET','https://viacep.com.br/ws/'+cep+'/json');
+			xhr.send();
+
+            xhr.onload = function(){
+				let strjson = xhr.response;
+				let end = JSON.parse(strjson);
+
+				if (xhr.status === 200) {
+					alert('Consulta Realizada com Sucesso!');
+				}else{
+					alert('ERRO! Status do erro: '+ xhr.status);
+				}
+
+                log.value = end.logradouro;
+                bai.value = end.bairro;
+                cid.value = end.localidade;
+			};
+            xhr.onreadystatechange = function(){
+                
+                switch (xhr.readyState){
+                    case 0:
+                    sta.innerHTML ='Objeto Criado...';  
+                        break;
+                     case 1:
+                    sta.innerHTML ='Objeto Aberto...';
+                        break;
+                     case 2:
+                    sta.innerHTML ='Recebendo Cabeçalhos...';
+                        break;
+                     case 3:
+                    sta.innerHTML ='Recebendo Dados...';
+                        break;
+                     case 4:
+                    sta.innerHTML ='Consulta Finalizada.';
+                        break;
+                     default:
+                    sta.innerHTML ='Desconhecido';
+                        break;
+                        }
+            };
+        });
+        cep2.onkeydown = function(event){
+            switch(event.keyCode){
+                case 9:
+               btn.click();
+            }
+        }
+
+        
+
+        </script>
+    </body>
+</html>
